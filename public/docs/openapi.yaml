@@ -9,13 +9,77 @@ servers:
 paths:
   /api/register:
     post:
-      summary: ''
-      operationId: postApiRegister
+      summary: 'Register a new user with some datas.'
+      operationId: registerANewUserWithSomeDatas
       description: ''
       parameters: []
-      responses: {  }
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  user:
+                    name: 'John Doe'
+                    email: johndoe@example.com
+                    phone_number: '1234567890'
+                    address: '123 Main St'
+                    position: Developer
+                  msg: 'User created successfully'
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: 'John Doe'
+                      email:
+                        type: string
+                        example: johndoe@example.com
+                      phone_number:
+                        type: string
+                        example: '1234567890'
+                      address:
+                        type: string
+                        example: '123 Main St'
+                      position:
+                        type: string
+                        example: Developer
+                  msg:
+                    type: string
+                    example: 'User created successfully'
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error:
+                    email:
+                      - 'The email field must be unique.'
+                    password:
+                      - 'The password field does not match the required format.'
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        example:
+                          - 'The email field must be unique.'
+                        items:
+                          type: string
+                      password:
+                        type: array
+                        example:
+                          - 'The password field does not match the required format.'
+                        items:
+                          type: string
       tags:
-        - Endpoints
+        - Authentication
       requestBody:
         required: true
         content:
@@ -25,30 +89,77 @@ paths:
               properties:
                 name:
                   type: string
-                  description: ''
-                  example: tenetur
+                  description: 'The name of the user.'
+                  example: quis
                 email:
-                  type: string
-                  description: 'Must be a valid email address.'
-                  example: ebert.rogers@example.com
+                  type: email
+                  description: 'The email address of the user (must be unique).'
+                  example: fermin.berge@example.org
                 password:
                   type: string
-                  description: 'Must match the regex /^(?=.*[A-Z])(?=.*\d).+$/. Must be at least 8 characters.'
-                  example: 'cgr?-or,RbyfO'
+                  description: 'required|min:8|regex:/^(?=.*[A-Z])(?=.*\d).+$/ The user''s password.'
+                  example: '&J;~W}3s'
+                phone_number:
+                  type: string
+                  description: 'optional The phone number of the user.'
+                  example: fugiat
+                address:
+                  type: string
+                  description: 'optional The address of the user.'
+                  example: accusamus
+                position:
+                  type: string
+                  description: 'optional The position of the user.'
+                  example: nesciunt
               required:
                 - name
                 - email
-                - password
       security: []
   /api/login:
     post:
-      summary: ''
-      operationId: postApiLogin
+      summary: 'Log in a registered user with email and password.'
+      operationId: logInARegisteredUserWithEmailAndPassword
       description: ''
       parameters: []
-      responses: {  }
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  token: your-access-token
+                properties:
+                  token:
+                    type: string
+                    example: your-access-token
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error: 'Invalid credentials'
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid credentials'
+        500:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error: 'Could not create token'
+                properties:
+                  error:
+                    type: string
+                    example: 'Could not create token'
       tags:
-        - Endpoints
+        - Authentication
       requestBody:
         required: true
         content:
@@ -57,52 +168,82 @@ paths:
               type: object
               properties:
                 email:
-                  type: string
-                  description: 'Must be a valid email address.'
-                  example: fadel.conor@example.org
+                  type: email
+                  description: 'The email address of the user.'
+                  example: lebsack.maddison@example.org
                 password:
                   type: string
-                  description: ''
-                  example: culpa
+                  description: "The user's password."
+                  example: 'i|l$lHwnijs,."OJd.w'
               required:
                 - email
                 - password
       security: []
   /api/me:
     get:
-      summary: ''
-      operationId: getApiMe
+      summary: "Get the currently authenticated user's information."
+      operationId: getTheCurrentlyAuthenticatedUsersInformation
       description: ''
       parameters: []
       responses:
-        401:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  user:
+                    name: 'John Doe'
+                    email: johndoe@example.com
+                    phone_number: '1234567890'
+                    address: '123 Main St'
+                    position: Developer
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: 'John Doe'
+                      email:
+                        type: string
+                        example: johndoe@example.com
+                      phone_number:
+                        type: string
+                        example: '1234567890'
+                      address:
+                        type: string
+                        example: '123 Main St'
+                      position:
+                        type: string
+                        example: Developer
+      tags:
+        - Authentication
+  /api/logout:
+    post:
+      summary: 'Log out the currently authenticated user.'
+      operationId: logOutTheCurrentlyAuthenticatedUser
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Logged out successfully'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'Logged out successfully'
       tags:
-        - Endpoints
-      security: []
-  /api/logout:
-    post:
-      summary: ''
-      operationId: postApiLogout
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-      security: []
+        - Authentication
 tags:
   -
-    name: Endpoints
+    name: Authentication
     description: ''
 components:
   securitySchemes:

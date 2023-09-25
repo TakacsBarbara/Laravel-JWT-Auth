@@ -10,17 +10,17 @@
     ],
     "info": {
         "name": "Laravel JWT Authentication",
-        "_postman_id": "5a6b14f2-058b-422e-b37e-e261eabf96ab",
+        "_postman_id": "1a8fda1f-0cc9-4972-9391-feab033f8ab2",
         "description": "Laravel, powered by JWT authentication, ensures a secure and efficient user authentication process. ",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
         {
-            "name": "Endpoints",
+            "name": "Authentication",
             "description": "",
             "item": [
                 {
-                    "name": "POST api\/register",
+                    "name": "Register a new user with some datas.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -41,17 +41,30 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"tenetur\",\"email\":\"ebert.rogers@example.com\",\"password\":\"cgr?-or,RbyfO\"}"
+                            "raw": "{\"name\":\"quis\",\"email\":\"fermin.berge@example.org\",\"password\":\"&J;~W}3s\",\"phone_number\":\"fugiat\",\"address\":\"accusamus\",\"position\":\"nesciunt\"}"
                         },
                         "description": "",
                         "auth": {
                             "type": "noauth"
                         }
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"johndoe@example.com\",\n        \"phone_number\": \"1234567890\",\n        \"address\": \"123 Main St\",\n        \"position\": \"Developer\"\n    },\n    \"msg\": \"User created successfully\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n    \"error\": {\n        \"email\": [\"The email field must be unique.\"],\n        \"password\": [\"The password field does not match the required format.\"]\n    }\n}",
+                            "name": ""
+                        }
+                    ]
                 },
                 {
-                    "name": "POST api\/login",
+                    "name": "Log in a registered user with email and password.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -72,17 +85,36 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"fadel.conor@example.org\",\"password\":\"culpa\"}"
+                            "raw": "{\"email\":\"lebsack.maddison@example.org\",\"password\":\"i|l$lHwnijs,.\\\"OJd.w\"}"
                         },
                         "description": "",
                         "auth": {
                             "type": "noauth"
                         }
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n    \"token\": \"your-access-token\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 401,
+                            "body": "{\n    \"error\": \"Invalid credentials\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 500,
+                            "body": "{\n    \"error\": \"Could not create token\"\n}",
+                            "name": ""
+                        }
+                    ]
                 },
                 {
-                    "name": "GET api\/me",
+                    "name": "Get the currently authenticated user's information.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -102,35 +134,19 @@
                             }
                         ],
                         "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
+                        "description": ""
                     },
                     "response": [
                         {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "application\/json"
-                                },
-                                {
-                                    "key": "access-control-allow-origin",
-                                    "value": "*"
-                                }
-                            ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"johndoe@example.com\",\n        \"phone_number\": \"1234567890\",\n        \"address\": \"123 Main St\",\n        \"position\": \"Developer\"\n    }\n}",
                             "name": ""
                         }
                     ]
                 },
                 {
-                    "name": "POST api\/logout",
+                    "name": "Log out the currently authenticated user.",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -150,12 +166,16 @@
                             }
                         ],
                         "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
+                        "description": ""
                     },
-                    "response": []
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n    \"message\": \"Logged out successfully\"\n}",
+                            "name": ""
+                        }
+                    ]
                 }
             ]
         }

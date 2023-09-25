@@ -13,6 +13,34 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
 
+    /**
+     * Register a new user with some datas.
+     *
+     * @group Authentication
+     * @bodyParam name string required The name of the user.
+     * @bodyParam email email required The email address of the user (must be unique).
+     * @bodyParam password string required|min:8|regex:/^(?=.*[A-Z])(?=.*\d).+$/ The user's password.
+     * @bodyParam phone_number string optional The phone number of the user.
+     * @bodyParam address string optional The address of the user.
+     * @bodyParam position string optional The position of the user.
+     *
+     * @response 201 {
+     *     "user": {
+     *         "name": "John Doe",
+     *         "email": "johndoe@example.com",
+     *         "phone_number": "1234567890",
+     *         "address": "123 Main St",
+     *         "position": "Developer"
+     *     },
+     *     "msg": "User created successfully"
+     * }
+     * @response 400 {
+     *     "error": {
+     *         "email": ["The email field must be unique."],
+     *         "password": ["The password field does not match the required format."]
+     *     }
+     * }
+     */
     public function register(Request $request)
     {
 
@@ -38,6 +66,23 @@ class AuthController extends Controller
         return response()->json(['user' => $user, 'msg' => 'User created successfully'], 201);
     }
 
+    /**
+     * Log in a registered user with email and password.
+     *
+     * @group Authentication
+     * @bodyParam email email required The email address of the user.
+     * @bodyParam password string required The user's password.
+     *
+     * @response 200 {
+     *     "token": "your-access-token"
+     * }
+     * @response 401 {
+     *     "error": "Invalid credentials"
+     * }
+     * @response 500 {
+     *     "error": "Could not create token"
+     * }
+     */
     public function login(Request $request)
     {
 
@@ -63,12 +108,38 @@ class AuthController extends Controller
         return response()->json(['token' => $token]);
     }
 
+    /**
+     * Get the currently authenticated user's information.
+     *
+     * @group Authentication
+     * @authenticated
+     *
+     * @response 200 {
+     *     "user": {
+     *         "name": "John Doe",
+     *         "email": "johndoe@example.com",
+     *         "phone_number": "1234567890",
+     *         "address": "123 Main St",
+     *         "position": "Developer"
+     *     }
+     * }
+     */
     public function me()
     {
         $user = Auth::user();
         return response()->json(['user' => $user], 200);
     }
 
+    /**
+     * Log out the currently authenticated user.
+     *
+     * @group Authentication
+     * @authenticated
+     *
+     * @response 201 {
+     *     "message": "Logged out successfully"
+     * }
+     */
     public function logout()
     {
         $token = JWTAuth::parseToken();
