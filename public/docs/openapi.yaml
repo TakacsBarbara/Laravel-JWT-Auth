@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: 'Laravel JWT Authentication'
+  description: 'Laravel, powered by JWT authentication, ensures a secure and efficient user authentication process. '
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+paths:
+  /api/register:
+    post:
+      summary: ''
+      operationId: postApiRegister
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: tenetur
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: ebert.rogers@example.com
+                password:
+                  type: string
+                  description: 'Must match the regex /^(?=.*[A-Z])(?=.*\d).+$/. Must be at least 8 characters.'
+                  example: 'cgr?-or,RbyfO'
+              required:
+                - name
+                - email
+                - password
+      security: []
+  /api/login:
+    post:
+      summary: ''
+      operationId: postApiLogin
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: fadel.conor@example.org
+                password:
+                  type: string
+                  description: ''
+                  example: culpa
+              required:
+                - email
+                - password
+      security: []
+  /api/me:
+    get:
+      summary: ''
+      operationId: getApiMe
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/logout:
+    post:
+      summary: ''
+      operationId: postApiLogout
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+tags:
+  -
+    name: Endpoints
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.'
+security:
+  -
+    default: []
